@@ -1,5 +1,14 @@
+// Metadata record for SAP OData responses
+public type Metadata record {
+    string id?;
+    string uri?;
+    string 'type?;
+    string etag?;
+};
+
 // Sales Order record type to structure the response
 public type SalesOrder record {
+    Metadata __metadata?;
     string SalesOrder?;
     string SalesOrderType?;
     string SoldToParty?;
@@ -11,7 +20,12 @@ public type SalesOrder record {
     string RequestedQuantity?;
 };
 
-// Response wrapper for sales orders collection
+// Collection wrapper for sales orders array
+public type SalesOrderCollection record {
+    SalesOrder[] results?;
+};
+
+// Response wrapper for sales orders OData response
 public type SalesOrderResponse record {
-    SalesOrder[] d?;
+    SalesOrderCollection d?;
 };

@@ -13,7 +13,7 @@ sap:Client sapClient = check new (s4hanaUrl, {
 service /api on new http:Listener(8080) {
     
     // GET endpoint to retrieve all sales orders
-    resource function get salesorders() returns SalesOrderResponse|error {
+    resource function get salesorders() returns SalesOrder[]|error {
         
         // Call S4HANA API to get sales orders
         SalesOrderResponse salesOrderData = check sapClient->get(
@@ -21,7 +21,18 @@ service /api on new http:Listener(8080) {
             targetType = SalesOrderResponse
         );
         
-        return salesOrderData;
+        // Extract sales orders from the OData response structure
+        SalesOrderCollection? salesOrderCollection = salesOrderData.d;
+        if salesOrderCollection is () {
+            return [];
+        }
+        
+        SalesOrder[]? salesOrders = salesOrderCollection.results;
+        if salesOrders is () {
+            return [];
+        }
+        
+        return salesOrders;
     }
     
     // GET endpoint to retrieve a specific sales order by ID
