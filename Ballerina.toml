@@ -1,0 +1,7 @@
+[package]
+org = "puneetmakwana"
+name = "tests4hana"
+version = "0.1.0"
+
+[build-options]
+sticky = true
